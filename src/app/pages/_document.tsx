@@ -14,8 +14,8 @@ import {
   DocumentHeadTagsProps,
   documentGetInitialProps,
 } from '@mui/material-nextjs/v14-pagesRouter';
-import { ServerStyleSheets as JSSServerStyleSheets } from '@mui/styles';
-import theme from '../src/theme';
+import { ServerStyleSheets as JSSServerStyleSheets } from '@mui/system';
+import theme from '../theme';
 
 export default function MyDocument(props: DocumentProps & DocumentHeadTagsProps) {
   return (
