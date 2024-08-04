@@ -1,5 +1,8 @@
+"use client"
+
 import {Box, Stack, Typography,Button, Modal, TextField} from '@mui/material';
-import {firestore} from '@/firebase'
+//import * as firebase from "firebase/app";
+import {firestore} from 'firebase/app'
 import { collection, deleteDoc, doc, getDocs, query, setDoc} from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 
@@ -70,26 +73,22 @@ export default function Home(){
                 <Typography id="modal-modal-title" variant="h6" component="h2">
                     Add Item
                 </Typography>
-                    <Stack width={'100%'} height={'300px'} direction={'row'} spacing={2}>
+                    <Stack width={'100%'} direction={'row'} spacing={2}>
                         <TextField id="outlined-basic" label="Item" variant="outlined" fullWidth value={itemName}
                             onchange={(e) => setItemName(e.target.value)}/>
-                        <Button variant="outlined" onClick={() => {
-                            addItem(itemName) 
-                            handleClose()}}
+                        <Button variant="outlined" onClick={() => { addItem(itemName) 
+                        handleClose()}}
                             setItemName={''}> 
                             Add
                         </Button>
                     </Stack>
-                <Typography id="modal-modal-description" sx={{ mt:2}}>
-                    Change Item
-                </Typography>
             </Box>
         </Modal>    
-    <Button variant="contained" onClick={'handleOpen'}>
+    <Button variant="contained" onClick={handleOpen}>
         Add
     </Button>
         <Box border ={'1px, solid, #333'}>
-            <Box width="800" height="100px" bgcolor={'#f0f0f0'}>
+            <Box width="800" height="100px" bgcolor={'#ADD8e6'}>
                 <Typography variant={'h2'} Color={'#333'} textAlign={'center'}>
                     Pantry Items
                 </Typography>
