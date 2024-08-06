@@ -8,18 +8,19 @@ import {
     Modal,
     TextField,
 } from "@mui/material";
-//import * as firebase from "firebase/app";
-import { firestore } from "firebase/app";
+// import * as firebase from "firebase/app";
+import { firestore } from "./firebase";
 import {
     collection,
     deleteDoc,
     doc,
     getDocs,
+    getDoc,
     query,
     setDoc,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
-// import { display } from '@mui/system';
+
 
 const style = {
     position: "absolute",
@@ -36,7 +37,9 @@ const style = {
     gap: 3,
 };
 
+
 export default function Home() {
+    
     const [pantry, setPantry] = useState([]);
 
     const [open, setOpen] = useState(false);
@@ -62,10 +65,10 @@ export default function Home() {
     }, []);
 
     // Adding Items
-    const addItem = async (item) => {
-        const docRef = doc(collection(firestore, "pantry"), item);
-        const docSnap = await getDocs(docRef);
-        if (docSnap.exist()) {
+    const addItem = async (eapantryapp) => {
+        const docRef = doc(collection(firestore, "pantry"),eapantryapp);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
             const { count } = docSnap.data();
             await setDoc(docRef, { count: count + 1 });
         } else {
@@ -75,10 +78,10 @@ export default function Home() {
     };
 
     // Removing Items
-    const removeItem = async (item) => {
-        const docRef = doc(collection(firestore, "pantry"), item);
-        const docSnap = await getDocs(docRef);
-        if (docSnap.exist()) {
+    const removeItem = async (eapantryapp) => {
+        const docRef = doc(collection(firestore, "pantry"),eapantryapp);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
             const { count } = docSnap.data();
             if (count == 1) {
                 await deleteDoc(docRef);
@@ -116,12 +119,13 @@ export default function Home() {
                             variant="outlined"
                             fullWidth
                             value={itemName}
-                            onchange={(e) => setItemName(e.target.value)}
+                            onChange={(e) => setItemName(e.target.value)}
                         />
                         <Button
                             variant="outlined"
                             onClick={() => {
                                 addItem(itemName);
+                                setItemName('');
                                 handleClose();
                             }}
                         >
@@ -140,44 +144,33 @@ export default function Home() {
                     </Typography>
                 </Box>
                 <Stack width="800px" height="300px" spacing="2" overflow={"auto"}>
-                    {pantry.map(({ name, count }) => (
-                        <Stack
+                    {pantry.map(({key:name, value:count}) => (
+                        <Box
                             key={name}
-                            width="100vw"
-                            height="300vh"
+                            width=" 100%"
+                            minHeight="150px"
                             display={"flex"}
-                            justifyContent={"center"}
+                            justifyContent={"space-between"}
                             alignItems={"center"}
-                            bgColor={"#f0f0f0"}
-                            alignContent={"space-between"}
+                            bgcolor={"#f0f0f0"}
+                            paddingX={5}
                         >
-                            <Box
-                                key={i}
-                                width=" 100%"
-                                minHeight="150px"
-                                display={"flex"}
-                                justifyContent={"space-between"}
-                                alignItems={"center"}
-                                bgcolor={"#f0f0f0"}
-                                paddingX={5}
+                            <Typography
+                                variant={"h3"}
+                                color={"#333"}
+                                textAlign={"center"}
                             >
-                                <Typography
-                                    variant={"h3"}
-                                    Color={"#333"}
-                                    textAlign={"center"}
-                                    ontWeight={"bold"}
-                                >
-                                    {name}.charAt(0).toUpperCase() + {name}.slice(1)
-                                </Typography>
+                               { {name}.charAt(0).toUpperCase() + {name}.slice(1)
+                                }
+                            </Typography>
 
-                                <Typography variant={"h3"} color={"#333"} textAlign={"center"}>
-                                    quatity:{count}
-                                </Typography>
-                                <Button variant="contained" onClick={() => removeItem(i)}>
-                                    Remove
-                                </Button>
-                            </Box>
-                        </Stack>
+                            <Typography variant={"h3"} color={"#333"} textAlign={"center"}>
+                            quantity:{count}
+                            </Typography>
+                            <Button variant="contained" onClick={() => removeItem(name)}>
+                                Remove
+                            </Button>
+                        </Box>
                     ))}
                 </Stack>
             </Box>
